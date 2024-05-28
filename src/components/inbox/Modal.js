@@ -1,4 +1,30 @@
+import { useEffect, useState } from "react";
+import { useSendNewMessageMutation } from "../../features/messages/messagesApi";
+import Error from "../ui/Error";
+
 export default function Modal({ open, control }) {
+    const [username, setUser] = useState('');
+    const [message, setMessage] = useState('');
+    const [failed, setFailed] = useState(false);
+    const [send, {isError, error, isSuccess}] = useSendNewMessageMutation();
+
+    useEffect(() => {
+        if(isError) 
+            setFailed(true);
+        
+        if(isSuccess)
+            setFailed(false);
+    }, [error, isError, isSuccess])
+    
+    const handleSend = async (e) => {
+        e.preventDefault();
+        if(username && message && message.trim() !== '') {
+            await send({username, message});
+            setUser('')
+            setMessage('')
+        }
+    }
+    
     return (
         open && (
             <>
@@ -10,7 +36,7 @@ export default function Modal({ open, control }) {
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                         Send message
                     </h2>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form className="mt-8 space-y-6" onSubmit={handleSend}>
                         <input type="hidden" name="remember" value="true" />
                         <div className="rounded-md shadow-sm -space-y-px">
                             <div>
@@ -22,6 +48,8 @@ export default function Modal({ open, control }) {
                                     name="to"
                                     type="to"
                                     required
+                                    value={username}
+                                    onChange={(e) => setUser(e.target.value)}
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                                     placeholder="Send to"
                                 />
@@ -35,6 +63,8 @@ export default function Modal({ open, control }) {
                                     name="message"
                                     type="message"
                                     required
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                                     placeholder="Message"
                                 />
@@ -52,6 +82,7 @@ export default function Modal({ open, control }) {
 
                         {/* <Error message="There was an error" /> */}
                     </form>
+                    {failed && <Error message={error?.data.error}/>}
                 </div>
             </>
         )
