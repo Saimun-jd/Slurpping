@@ -6,25 +6,30 @@ export default function Modal({ open, control }) {
     const [username, setUser] = useState('');
     const [message, setMessage] = useState('');
     const [failed, setFailed] = useState(false);
-    const [send, {isError, error, isSuccess}] = useSendNewMessageMutation();
+    const [send, { isError, error, isSuccess }] = useSendNewMessageMutation();
 
     useEffect(() => {
-        if(isError) 
+        if (isError) 
             setFailed(true);
+    }, [isError]);
+
+    useEffect(() => {
+            if(isSuccess) {
+                setUser('');
+                setMessage('');
+                // console.log("MOdal is closing");
+                control();
+            }
         
-        if(isSuccess)
-            setFailed(false);
-    }, [error, isError, isSuccess])
-    
+    }, [ control, isSuccess]);
+
     const handleSend = async (e) => {
         e.preventDefault();
-        if(username && message && message.trim() !== '') {
-            await send({username, message});
-            setUser('')
-            setMessage('')
+        if (username && message && message.trim() !== '') {
+            await send({ username, message });
         }
-    }
-    
+    };
+
     return (
         open && (
             <>
@@ -32,7 +37,10 @@ export default function Modal({ open, control }) {
                     onClick={control}
                     className="fixed w-full h-full inset-0 z-10 bg-black/50 cursor-pointer"
                 ></div>
-                <div className="rounded w-[400px] lg:w-[600px] space-y-8 bg-white p-10 absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+                <div 
+                    onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
+                    className="rounded w-[400px] lg:w-[600px] space-y-8 bg-white p-10 absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+                >
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                         Send message
                     </h2>
@@ -46,7 +54,7 @@ export default function Modal({ open, control }) {
                                 <input
                                     id="to"
                                     name="to"
-                                    type="to"
+                                    type="text"
                                     required
                                     value={username}
                                     onChange={(e) => setUser(e.target.value)}
@@ -61,7 +69,6 @@ export default function Modal({ open, control }) {
                                 <textarea
                                     id="message"
                                     name="message"
-                                    type="message"
                                     required
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
@@ -80,9 +87,8 @@ export default function Modal({ open, control }) {
                             </button>
                         </div>
 
-                        {/* <Error message="There was an error" /> */}
+                        {failed && <Error message={error?.data?.error} />}
                     </form>
-                    {failed && <Error message={error?.data.error}/>}
                 </div>
             </>
         )
