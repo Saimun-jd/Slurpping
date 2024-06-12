@@ -3,6 +3,7 @@ import logoImage from "../assets/images/lws-logo-light.svg";
 import { useEffect, useState } from "react";
 import { useRegisterMutation } from "../features/auth/authApi";
 import Error from "../components/ui/Error"
+import RegistrationSuccess from "../components/ui/RegistrationSuccess";
 
 export default function Register() {
     const [name, setName] = useState('');
@@ -11,6 +12,7 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [agreeTerm, setAgreeTerm] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
     const [register, {data, isLoading, error: responseError}] = useRegisterMutation();
@@ -19,7 +21,7 @@ export default function Register() {
             setErrorMessage(responseError.data.error);
         }
         if(data) {
-            navigate("/inbox");
+            setSuccess(true);
         }
     }, [data, responseError, navigate]);
 
@@ -160,6 +162,9 @@ export default function Register() {
                                 Sign up
                             </button>
                         </div>
+                        {
+                            success && <RegistrationSuccess/>
+                        }
                         {
                         errorMessage !== '' &&
                         <Error message={errorMessage}/>

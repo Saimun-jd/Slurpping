@@ -22,12 +22,12 @@ export const authApi = apiSlice.injectEndpoints({
 							accessToken: result.data?.accessToken,
 						})
 					);
-					dispatch(
-						userLoggedIn({
-							userInfo: result.data.user,
-							accessToken: result.data.accessToken,
-						})
-					);
+					// dispatch(
+					// 	userLoggedIn({
+					// 		userInfo: result.data.user,
+					// 		accessToken: result.data.accessToken,
+					// 	})
+					// );
 				} catch (error) {
 					// do nothing
 					console.log(error);
@@ -70,7 +70,10 @@ export const authApi = apiSlice.injectEndpoints({
 				method: "POST",
 			}),
 		}),
+		VerifyEmail: builder.query({
+			query: (token) => `/api/auth/verify-email?token=${token}`
+		})
 	}),
 });
 
-export const {useLoginMutation, useRegisterMutation} = authApi;
+export const {useLoginMutation, useRegisterMutation, useVerifyEmailQuery} = authApi;

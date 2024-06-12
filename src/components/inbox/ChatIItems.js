@@ -18,7 +18,7 @@ export default function ChatItems() {
 	if (isLoading) {
 		content = <li className="m-2 text-center">Loading...</li>;
 	} else if (!isLoading && isError) {
-		const errorMessage = typeof error?.data === 'string' ? error.data : 'An error occurred';
+		const errorMessage = typeof error?.data.error === 'string' ? error.data.error : 'An fucking error occurred';
 		content = (
 			<li className="m-2 text-center">
 				<Error message={errorMessage} />

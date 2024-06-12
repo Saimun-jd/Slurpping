@@ -6,7 +6,7 @@ export default function Modal({ open, control }) {
     const [username, setUser] = useState('');
     const [message, setMessage] = useState('');
     const [failed, setFailed] = useState(false);
-    const [send, { isError, error, isSuccess }] = useSendNewMessageMutation();
+    const [send, { isError, error, isSuccess, isLoading }] = useSendNewMessageMutation();
 
     useEffect(() => {
         if (isError) 
@@ -82,6 +82,7 @@ export default function Modal({ open, control }) {
                             <button
                                 type="submit"
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
+                                disabled={isLoading}
                             >
                                 Send Message
                             </button>

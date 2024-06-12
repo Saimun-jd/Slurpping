@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import useAuthCheck from "./hooks/useAuthCheck";
 import PrivateRoute from "./pages/PrivateRoute";
 import PublicRoute from "./pages/PublicRoute";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
 	const authChecked = useAuthCheck();
@@ -25,9 +26,7 @@ function App() {
 				<Route
 					path="/register"
 					element={
-						<PublicRoute>
-							<Register />
-						</PublicRoute>
+						<Register />
 					}
 				/>
 				<Route
@@ -44,6 +43,12 @@ function App() {
 						<PrivateRoute>
 							<Conversation />
 						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/verify-email"
+					element={
+						<VerifyEmail/>
 					}
 				/>
 			</Routes>
