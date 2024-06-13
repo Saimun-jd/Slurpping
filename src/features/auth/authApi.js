@@ -9,30 +9,30 @@ export const authApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body: data,
 			}),
-			async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-				try {
-					const result = await queryFulfilled;
-					localStorage.setItem(
-						"userInfo",
-						JSON.stringify({ user: result.data?.user })
-					);
-					localStorage.setItem(
-						"accessToken",
-						JSON.stringify(
-							result.data?.accessToken,
-						)
-					);
-					// dispatch(
-					// 	userLoggedIn({
-					// 		userInfo: result.data.user,
-					// 		accessToken: result.data.accessToken,
-					// 	})
-					// );
-				} catch (error) {
-					// do nothing
-					console.log(error);
-				}
-			},
+			// async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+			// 	try {
+			// 		const result = await queryFulfilled;
+			// 		localStorage.setItem(
+			// 			"userInfo",
+			// 			JSON.stringify({ user: result.data?.user })
+			// 		);
+			// 		localStorage.setItem(
+			// 			"accessToken",
+			// 			JSON.stringify(
+			// 				result.data?.accessToken,
+			// 			)
+			// 		);
+			// 		// dispatch(
+			// 		// 	userLoggedIn({
+			// 		// 		userInfo: result.data.user,
+			// 		// 		accessToken: result.data.accessToken,
+			// 		// 	})
+			// 		// );
+			// 	} catch (error) {
+			// 		// do nothing
+			// 		console.log(error);
+			// 	}
+			// },
 		}),
 		login: builder.mutation({
 			query: (data) => ({
@@ -71,7 +71,30 @@ export const authApi = apiSlice.injectEndpoints({
 			}),
 		}),
 		VerifyEmail: builder.query({
-			query: (token) => `/api/auth/verify-email?token=${token}`
+			query: (token) => `/api/auth/verify-email?token=${token}`,
+			async onQueryStarted(arg, {queryFulfilled, dispatch}) {
+				try{
+					const result = await queryFulfilled;
+					localStorage.setItem(
+						"userInfo",
+						JSON.stringify({user: result.data?.user })
+					);
+					localStorage.setItem(
+						"accessToken",
+						JSON.stringify(
+							result.data?.accessToken,
+						)
+					);
+					dispatch(
+						userLoggedIn({
+							userInfo: {user: result.data?.user},
+							accessToken: result.data?.accessToken,
+						})
+					);
+				} catch(error) {
+					console.log(error)
+				}
+			}
 		}),
 		findUser: builder.query({
 			query: (username) => `/api/auth/finduser?username=${username}`

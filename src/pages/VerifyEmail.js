@@ -8,7 +8,7 @@ function VerifyEmail() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data, isLoading, error } = useVerifyEmailQuery(
+  const { data, isLoading, error, isError } = useVerifyEmailQuery(
     new URLSearchParams(location.search).get('token')
   );
 
@@ -16,20 +16,20 @@ function VerifyEmail() {
     if (error) {
       console.log("verification error ", error?.message)
     }
-  }, [error, navigate]);
+  }, [error]);
 
-  useEffect(() => {
-		const localAuth = localStorage?.getItem("userInfo");
-		const token = localStorage?.getItem("accessToken");
-		if (localAuth?.userInfo && token?.accessToken) {
-			dispatch(
-				userLoggedIn({
-					userInfo: JSON.parse(localAuth.userInfo),
-					accessToken: JSON.parse(token.accessToken),
-				})
-			);
-		}
-  }, []);
+  // useEffect(() => {
+	// 	const localAuth = localStorage?.getItem("userInfo");
+	// 	const token = localStorage?.getItem("accessToken");
+	// 	if (localAuth?.userInfo && token?.accessToken) {
+	// 		dispatch(
+	// 			userLoggedIn({
+	// 				userInfo: JSON.parse(localAuth.userInfo),
+	// 				accessToken: JSON.parse(token.accessToken),
+	// 			})
+	// 		);
+	// 	}
+  // }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -38,7 +38,7 @@ function VerifyEmail() {
 
         {isLoading ? (
           <p className="text-gray-600 text-center">Verifying your email. Please wait...</p>
-        ) : error ? (
+        ) : isError ? (
           <p className="text-red-500 text-center">
             Verification failed: {error.data?.error || 'Unknown error'}
           </p>
