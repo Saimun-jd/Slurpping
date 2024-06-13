@@ -2,11 +2,13 @@ import ChatItem from "./ChatItem";
 import { useGetLastConversationQuery } from "../../features/conversation/conversationsApi";
 import Error from "../ui/Error";
 import TimeAgo from "../TimeAgo";
+import { useSelector } from "react-redux";
 
 export default function ChatItems() {
 	// const { userInfo } = useSelector((state) => state.auth) || {};
-	// const {_id} = userInfo;
-	const {_id} = localStorage.getItem("userInfo");
+	// const _id = userInfo.user._id;
+	const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+	const _id = userInfo.user._id;
 	const {
 		data: lastConversation = [],
 		isLoading,

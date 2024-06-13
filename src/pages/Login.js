@@ -22,22 +22,22 @@ export default function Login() {
         else if(data?.accessToken && data?.user) {
             // localStorage.getItem("accessToken")? console.log("yesss"): console.log("NOOO");
             console.log("setting auth state")
-            localStorage.setItem(
-						"userInfo",
-						JSON.stringify({user: data?.user })
-					);
-					localStorage.setItem(
-						"accessToken",
-						JSON.stringify({
-							accessToken: data?.accessToken,
-						})
-					);
-            dispatch(userLoggedIn({userInfo: data.user, accessToken: data.accessToken}));
+            // localStorage.setItem(
+			// 			"userInfo",
+			// 			JSON.stringify({user: data?.user })
+			// 		);
+			// 		localStorage.setItem(
+			// 			"accessToken",
+			// 			JSON.stringify({
+			// 				accessToken: data?.accessToken,
+			// 			})
+			// 		);
+            // dispatch(userLoggedIn({userInfo: data.user, accessToken: data.accessToken}));
 			navigate("/inbox");
         }
     }, [data, responseError, navigate, dispatch]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
         if(username && password) {

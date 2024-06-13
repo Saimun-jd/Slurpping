@@ -25,7 +25,7 @@ export default function Register() {
         }
     }, [data, responseError, navigate]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
         if(agreeTerm){
