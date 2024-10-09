@@ -2,7 +2,8 @@ import ChatItem from "./ChatItem";
 import { useGetLastConversationQuery } from "../../features/conversation/conversationsApi";
 import Error from "../ui/Error";
 import TimeAgo from "../TimeAgo";
-import { useSelector } from "react-redux";
+import { useCallback, useState, useEffect } from "react";
+import {useLocation} from 'react-router-dom'
 
 export default function ChatItems() {
 	// const { userInfo } = useSelector((state) => state.auth) || {};
@@ -15,6 +16,13 @@ export default function ChatItems() {
 		isError,
 		error,
 	} = useGetLastConversationQuery(_id);
+	const location = useLocation();
+	const [activeChat, setActiveChat] = useState(null);
+
+	useEffect(() => {
+		const locatonParsed = location.pathname.split("/");
+		setActiveChat(locatonParsed.slice(-1)[0]);
+	}, [location.pathname])
 
 	let content = null;
 	if (isLoading) {
@@ -40,6 +48,7 @@ export default function ChatItems() {
 						lastMessage={conversation.message}
 						lastTime={<TimeAgo timestamp={conversation.createdAt}/>}
 						userID={friendID}
+						activeChat={activeChat}
 					/>
 				</li>
 			);

@@ -17,11 +17,11 @@ export default function Options() {
 	};
 	return (
 		<form onSubmit={handleSubmit}>
-			<div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
+			<div className="flex items-center justify-between w-full p-3 border-t border-[#BDC3C7]">
 				<input
 					type="text"
 					placeholder="Message"
-					className="block w-full py-2 pl-4 mx-3 bg-gray-100 focus:ring focus:ring-violet-500 rounded-full outline-none focus:text-gray-700"
+					className="block w-full py-2 pl-4 mx-3 bg-gray-100 focus:ring focus:ring-violet-500 rounded-full outline-none focus:text-[#2C3E50]"
 					name="message"
 					value={message}
 					onChange={(e) => setMessage(e.target.value)}
@@ -29,7 +29,7 @@ export default function Options() {
 				/>
 				<button type="submit">
 					<svg
-						className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
+						className="w-5 h-5 text-blue-500 origin-center transform rotate-90"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
 						fill="currentColor"

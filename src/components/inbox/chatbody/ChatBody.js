@@ -42,7 +42,7 @@ export default function ChatBody() {
 
     return (
         <div className="w-full lg:col-span-2 lg:block">
-            <div className="w-full grid conversation-row-grid">
+            <div className="w-full grid conversation-row-grid bg-[#F5F7FA]">
                 {content}
             </div>
         </div>

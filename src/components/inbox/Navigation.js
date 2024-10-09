@@ -10,13 +10,13 @@ export default function Navigation() {
         dispatch(userLoggedOut());
     }
     return (
-        <nav className="border-general sticky top-0 z-40 border-b bg-violet-700 transition-colors">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between h-16 items-center">
+        <nav className="border-general sticky top-0 z-40 border-b bg-[#2C3E50] transition-colors">
+            <div className="max-w-9xl mx-auto">
+                <div className="flex justify-between h-16 items-center mx-4">
                     <Link to="/">
                         <img
-                            className="h-10"
-                            src={logoImage}
+                            className="h-16"
+                            src="/chatify-logo.png"
                             alt="Chatify"
                         />
                     </Link>

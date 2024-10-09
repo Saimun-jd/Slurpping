@@ -8,11 +8,11 @@ export default function Sidebar() {
     const controlModal = useCallback(() => setOpened((prevState) => !prevState), [])
 
     return (
-        <div className="w-[100px] border-r border-t-0 border-gray-300 lg:col-span-1 md:w-full">
-            <div className="h-[65px] text-center text-grey-500 p-4 border-b border-gray-300 flex md:justify-end justify-center">
+        <div className="w-[100px] border-r border-t-0 border-gray-300 lg:col-span-1 md:w-full bg-[#34495E]">
+            <div className="h-[65px] text-center text-white p-4 border-b border-gray-300 flex md:justify-end justify-center">
                 <svg
                     viewBox="0 0 194.436 194.436"
-                    className="w-5 h-5 text-grey-500 cursor-pointer"
+                    className="w-5 h-5 text-grey-500 cursor-pointer bg-white"
                     onClick={controlModal}
                 >
                     <path

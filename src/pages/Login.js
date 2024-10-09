@@ -46,18 +46,18 @@ export default function Login() {
     }
 
     return (
-        <div className="grid place-items-center h-screen bg-[#F9FAFB">
+        <div className="grid place-items-center h-screen bg-gradient-to-r from-slate-900 to-slate-700">
             <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full space-y-8">
                     <div>
                         <Link to="/">
                             <img
-                                className="mx-auto h-12 w-auto"
-                                src={logoImage}
-                                alt="Learn with sumit"
+                                className="mx-auto h-22 w-auto"
+                                src="/chatify-logo.png"
+                                alt="Chatify- chat without hesitation"
                             />
                         </Link>
-                        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        <h2 className="mt-6 text-center text-3xl font-extrabold bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent">
                             Sign in to your account
                         </h2>
                     </div>
@@ -105,7 +105,7 @@ export default function Login() {
                             <div className="text-sm">
                                 <Link
                                     to="/register"
-                                    className="font-medium text-violet-600 hover:text-violet-500"
+                                    className="font-medium text-blue-600 hover:text-blue-500"
                                 >
                                     Register
                                 </Link>
@@ -115,7 +115,7 @@ export default function Login() {
                         <div>
                             <button
                                 type="submit"
-                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
+                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 disabled={isLoading}
                             >
                                 Sign in
