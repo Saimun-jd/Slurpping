@@ -39,7 +39,7 @@
 
 <!-- HOW TO RUN -->
 
-## ![rocketIcon][rocketicon-shield] How to run
+## ![SVG Image](https://gist.githubusercontent.com/xiaohk/13d86f088eb0fbc075c980daca388298/raw/996980b1132a4fb5b0b7fb086c033ec41e17a5b9/rocket.svg) How to run
 
 Please follow the below instructions to run this branch in your machine:
 
