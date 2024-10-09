@@ -25,8 +25,9 @@ export default function ChatBody() {
         content = <div>No message found</div>
     } else if(!isLoading && !isError && messages.length > 0) {
         const a_message = messages[0];
-        const {senderID, receiverID} = a_message;
-        const friendName = myid === senderID._id? receiverID.username: senderID.username;
+        // console.log(a_message);
+        // const {senderID, receiverID} = a_message;
+        const friendName = myid === a_message.sender._id? a_message.receiver.username: a_message.sender.username;
         content = (
             <>
                 <ChatHead

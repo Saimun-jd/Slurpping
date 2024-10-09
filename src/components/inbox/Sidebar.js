@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import ChatItems from "./ChatIItems";
+import ChatItems from "./ChatItems";
 import Modal from "./Modal";
 
 export default function Sidebar() {

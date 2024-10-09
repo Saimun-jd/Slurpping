@@ -30,14 +30,16 @@ export default function ChatItems() {
 		content = <li className="m-2 text-center">No Conversations found</li>;
 	} else if (!isLoading && !isError && lastConversation?.length > 0) {
 		content = lastConversation.map((conversation) => {
+			const friendName = conversation.senderID === _id? conversation.receiver: conversation.sender
+			const friendID = conversation.senderID === _id? conversation.receiverID: conversation.senderID
 			return (
-				<li key={conversation.lastMessage._id}>
+				<li key={conversation._id}>
 					<ChatItem		
 						avatar="https://cdn.pixabay.com/photo/2018/09/12/12/14/man-3672010__340.jpg"
-						name={conversation.participant.username}
-						lastMessage={conversation.lastMessage.message}
-						lastTime={<TimeAgo timestamp={conversation.lastMessage.updatedAt}/>}
-						userID={conversation.participant._id}
+						name={friendName}
+						lastMessage={conversation.message}
+						lastTime={<TimeAgo timestamp={conversation.createdAt}/>}
+						userID={friendID}
 					/>
 				</li>
 			);
