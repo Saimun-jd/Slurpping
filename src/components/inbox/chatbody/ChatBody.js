@@ -25,32 +25,38 @@ export default function ChatBody() {
 	const socket = useSocket();
 
     const handleNewMessage = useCallback((newMsg) => {
-		setAllMsg((prev) => {
-			// Check if the message already exists to prevent duplicates
-			if (!prev.some(msg => msg._id === newMsg._id)) {
-				return [...prev, newMsg];
-			}
-			return prev;
-		});
-	}, []);
+        if (newMsg.sender._id === id || newMsg.receiver._id === id) {
+            setAllMsg((prev) => {
+                if (!prev.some(msg => msg._id === newMsg._id)) {
+                    return [...prev, newMsg];
+                }
+                return prev;
+            });
+        }
+    }, [id]);
 
-	useEffect(() => {
-        if(socket) {
-
+    useEffect(() => {
+        if (socket) {
+            socket.emit('setup', { _id: myid });
             socket.on("message received", handleNewMessage);
 
             return () => {
                 socket.off("message received", handleNewMessage);
             };
         }
-	}, [socket, handleNewMessage]);
+    }, [socket, handleNewMessage, myid]);
+
+    useEffect(() => {
+        if (messages) {
+            setAllMsg(messages);
+        }
+    }, [messages]);
 
     const combinedMessages = useMemo(() => {
-		const uniqueMessages = [...messages || [], ...allMsg];
-		return uniqueMessages.filter((msg, index, self) =>
-			index === self.findIndex((t) => t._id === msg._id)
-		);
-	}, [messages, allMsg]);
+        return allMsg.filter((msg, index, self) =>
+            index === self.findIndex((t) => t._id === msg._id)
+        );
+    }, [allMsg]);
 
 	let content = null;
 
@@ -69,11 +75,11 @@ export default function ChatBody() {
 			myid === a_message.sender._id
 				? a_message.receiver.username
 				: a_message.sender.username;
-		const friendID =
-			myid === a_message.sender._id
-				? a_message.receiver._id
-				: a_message.sender._id;
-		socket.emit("join chat", friendID);
+		// const friendID =
+		// 	myid === a_message.sender._id
+		// 		? a_message.receiver._id
+		// 		: a_message.sender._id;
+		// socket.emit("join chat", friendID);
 		// console.log("all messge is ", allMsg);
 
 		content = (
