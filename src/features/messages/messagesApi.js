@@ -10,7 +10,7 @@ export const messagesApi = apiSlice.injectEndpoints({
 				arg,
 				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved }
 			) {
-				const socket = io("http://localhost:9000", {
+				const socket = io("https://slurpping-api.onrender.com", {
 					reconnectionDelay: 1000,
 					reconnection: true,
 					reconnectionAttempts: 10,
