@@ -1,24 +1,17 @@
 import { useState } from "react";
 import { useSendMessageMutation } from "../../../features/messages/messagesApi";
 import { useParams } from "react-router-dom";
-import { useSocket } from "../../../socket/socket";
-import { useSelector } from "react-redux";
 
 export default function Options() {
 	const { id } = useParams();
 	const [message, setMessage] = useState("");
 	const [send] =
 		useSendMessageMutation();
-	const socket = useSocket();
-	const auth = useSelector(state => state.auth);
-	const myid = auth.userInfo.user._id;
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (message.trim() !== "") {
-			const res = await send({ id, message });
-			// console.log("res for sent messsage ", res.data.newMessage._id);
-			socket.emit('new message', {_id: res.data.newMessage._id, sender: {_id: myid}, receiver:{ _id: id}, message: message, createdAt: res.data.newMessage.createdAt, updatedAt: res.data.newMessage.updatedAt});
+			await send({ id, message });
 			setMessage("");
 		}
 	};
