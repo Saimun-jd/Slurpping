@@ -15,7 +15,7 @@ export const conversationApi = apiSlice.injectEndpoints({
 				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved }
 			) {
 				//create socket
-				const socket = io("http://localhost:9000", {
+				const socket = io("https://slurpping-api.onrender.com", {
 					reconnectionDelay: 1000,
 					reconnection: true,
 					reconnectionAttempts: 10,
@@ -56,9 +56,11 @@ export const conversationApi = apiSlice.injectEndpoints({
                                 conv.receiver = newMsg.receiverID.username;
                                 conv.createdAt = newMsg.createdAt;
                                 conv.updatedAt = newMsg.updatedAt;
+								
                             } else{
                                 // do nothing
                             }
+							draft.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
                             
 						});
 					});
@@ -102,6 +104,7 @@ export const conversationApi = apiSlice.injectEndpoints({
                                     createdAt: newMsg.createdAt,
                                     updatedAt: newMsg.updatedAt
                                 })
+								
                             } else {
                                 console.log("some thing else");
                             }
