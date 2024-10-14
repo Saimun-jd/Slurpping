@@ -31,7 +31,7 @@ C139.689,120.449,136.331,117.092,132.189,117.092z"
                 </svg>
             </div>
             <div className="overflow-auto h-[calc(100vh_-_129px)]">
-                <ChatItems />
+                <ChatItems/>
             </div>
             <Modal open={opened} control={controlModal} />
         </div>

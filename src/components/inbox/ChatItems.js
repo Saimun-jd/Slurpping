@@ -2,14 +2,23 @@ import ChatItem from "./ChatItem";
 import { useGetLastConversationQuery } from "../../features/conversation/conversationsApi";
 import Error from "../ui/Error";
 import TimeAgo from "../TimeAgo";
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {useLocation} from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux";
+import socketFunctions from "../../socket/socket";
+import { setOnlineUsers } from "../../features/conversation/conversationsSlice";
 
 export default function ChatItems() {
 	// const { userInfo } = useSelector((state) => state.auth) || {};
 	// const _id = userInfo.user._id;
 	const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 	const _id = userInfo.user._id;
+	//online users work
+	const onlineUsers = useSelector(state => state.conversations.onlineUsers);
+	const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
+    const user = auth.userInfo.user;
+    
 	const {
 		data: lastConversation = [],
 		isLoading,
@@ -23,6 +32,18 @@ export default function ChatItems() {
 		const locatonParsed = location.pathname.split("/");
 		setActiveChat(locatonParsed.slice(-1)[0]);
 	}, [location.pathname])
+
+	useEffect(() => {
+        socketFunctions.connectSocket(user, (users) => {dispatch(setOnlineUsers(users))});
+		console.log("use effect called");
+    }, [dispatch, user])
+
+	// function for checking online status
+	const checkOnlineStatus = (userId) => {
+		const online = onlineUsers.find((item) => item._id === userId);
+		
+		return online? true: false;
+	}
 
 	let content = null;
 	if (isLoading) {
@@ -49,6 +70,7 @@ export default function ChatItems() {
 						lastTime={<TimeAgo timestamp={conversation.createdAt}/>}
 						userID={friendID}
 						activeChat={activeChat}
+						online={checkOnlineStatus(friendID)}
 					/>
 				</li>
 			);
