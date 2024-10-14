@@ -15,7 +15,7 @@ export const conversationApi = apiSlice.injectEndpoints({
 				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved }
 			) {
 				//create socket
-				const socket = io("https://slurpping-api.onrender.com", {
+				const socket = io(process.env.REACT_DEV_ENV === "development"? 'http://localhost:9000': process.env.REACT_APP_API_URL, {
 					reconnectionDelay: 1000,
 					reconnection: true,
 					reconnectionAttempts: 10,
@@ -108,16 +108,7 @@ export const conversationApi = apiSlice.injectEndpoints({
                             } else {
                                 console.log("some thing else");
                             }
-                            // if(arg === newMsg.receiverID) {
-                            //     draft.push({
-                            //         _id: newMsg._id,
-                            //         message: newMsg.message,
-                            //         senderID: newMsg.senderID,
-                            //         receiverID: newMsg.receiverID,
-                            //         createdAt: newMsg.createdAt,
-                            //         updatedAt: newMsg.updatedAt
-                            //     })
-                            // }
+							draft.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 						});
 					});
 
