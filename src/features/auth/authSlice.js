@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     userInfo: localStorage.getItem('userInfo')? JSON.parse(localStorage.getItem('userInfo')): undefined,
-    accessToken: localStorage.getItem('accessToken')? JSON.parse(localStorage.getItem('accessToken')): undefined
+    accessToken: localStorage.getItem('accessToken')? JSON.parse(localStorage.getItem('accessToken')): undefined,
+    message: ''
 };
 
 const authSlice = createSlice({
@@ -18,9 +19,12 @@ const authSlice = createSlice({
             state.accessToken = undefined
             localStorage.removeItem('userInfo')
             localStorage.removeItem('accessToken')
+        },
+        userRegistered: (state) => {
+            state.message = "Registration successfull, please verify your email first to login."
         }
     }
 });
 
-export const {userLoggedIn, userLoggedOut} = authSlice.actions;
+export const {userLoggedIn, userLoggedOut, userRegistered} = authSlice.actions;
 export default authSlice.reducer;

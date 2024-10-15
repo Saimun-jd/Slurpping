@@ -3,18 +3,21 @@ import { useState, useEffect } from "react";
 import logoImage from "../assets/images/lws-logo-light.svg";
 import Error from "../components/ui/Error";
 import { useLoginMutation } from "../features/auth/authApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userLoggedIn } from "../features/auth/authSlice";
+import Success from "../components/ui/Success";
 
 export default function Login() {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const registrationStatus = useSelector(state => state.auth.message);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
     const [login, {data, isLoading, error: responseError}] = useLoginMutation();
+    
     useEffect(() => {
         if(responseError?.data){
             setErrorMessage(responseError.data.error);
@@ -44,6 +47,8 @@ export default function Login() {
             login({username, password});
         }
     }
+
+    console.log(registrationStatus);
 
     return (
         <div className="grid place-items-center h-screen bg-gradient-to-r from-slate-900 to-slate-700">
@@ -124,6 +129,9 @@ export default function Login() {
                         {
                         errorMessage !== '' &&
                         <Error message={errorMessage}/>
+                        }
+                        {
+                            (registrationStatus !== '' && errorMessage === '') && <Success message={registrationStatus}/>
                         }
                     </form>
                 </div>
