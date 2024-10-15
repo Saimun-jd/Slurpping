@@ -1,10 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRegisterMutation } from "../features/auth/authApi";
 import Error from "../components/ui/Error"
-import RegistrationSuccess from "../components/ui/RegistrationSuccess";
 import { useDispatch } from "react-redux";
-import { userRegistered } from "../features/auth/authSlice";
+import { Loader } from "lucide-react";
 
 export default function Register() {
     const [name, setName] = useState('');
@@ -13,9 +12,6 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [agreeTerm, setAgreeTerm] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [opened, setOpened] = useState(false);
-    const controlModal = useCallback(() => setOpened((prevState) => !prevState), [])
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -25,10 +21,8 @@ export default function Register() {
             setErrorMessage(responseError.data.error);
         }
         if(data) {
-            setSuccess(true);
-            setOpened(true);
-            dispatch(userRegistered());
-            navigate("/");
+            sessionStorage.setItem('registrationDone', 'true');
+            navigate("/", {state: {message: 'Registration completed successfully, please verify your email to login.'}});
         }
     }, [data, responseError, navigate, dispatch]);
 
@@ -164,13 +158,12 @@ export default function Register() {
                             <button
                                 type="submit"
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                disabled={isLoading}
+                                disabled={isLoading || !name || !email || !password || !confirmPassword || !agreeTerm}
                             >
                                 <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
-                                Sign up
+                                {isLoading? <Loader className="animate-spin"/>: 'Sign Up'}
                             </button>
                         </div>
-                            <RegistrationSuccess open={opened} control={controlModal}/>
                         {
                         errorMessage !== '' &&
                         <Error message={errorMessage}/>

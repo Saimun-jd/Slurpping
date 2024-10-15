@@ -1,17 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import logoImage from "../assets/images/lws-logo-light.svg";
 import Error from "../components/ui/Error";
 import { useLoginMutation } from "../features/auth/authApi";
-import { useDispatch, useSelector } from "react-redux";
-import { userLoggedIn } from "../features/auth/authSlice";
+import { useDispatch} from "react-redux";
 import Success from "../components/ui/Success";
+import { Loader } from "lucide-react";
 
 export default function Login() {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const registrationStatus = useSelector(state => state.auth.message);
+    const [registrationStatus, setRegistrationStatus] = useState('');
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
@@ -21,6 +20,7 @@ export default function Login() {
     useEffect(() => {
         if(responseError?.data){
             setErrorMessage(responseError.data.error);
+            setRegistrationStatus('');
         }
         else if(data?.accessToken && data?.user) {
             // localStorage.getItem("accessToken")? console.log("yesss"): console.log("NOOO");
@@ -40,6 +40,15 @@ export default function Login() {
         }
     }, [data, responseError, navigate, dispatch]);
 
+    useEffect(() => {
+        // console.log("location from inbox ", location.state.message);
+        const regiDone = sessionStorage.getItem('registrationDone');
+        if(regiDone){
+            setRegistrationStatus("Registration completed successfully, please check your email and verify to login.");
+        }
+        sessionStorage.removeItem('registrationDone');
+    }, [])
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
@@ -48,7 +57,7 @@ export default function Login() {
         }
     }
 
-    console.log(registrationStatus);
+    // console.log(registrationStatus);
 
     return (
         <div className="grid place-items-center h-screen bg-gradient-to-r from-slate-900 to-slate-700">
@@ -85,7 +94,7 @@ export default function Login() {
                                     onChange={(e) => setUserName(e.target.value)}
                                     required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
-                                    placeholder="Email address"
+                                    placeholder="Username"
                                 />
                             </div>
                             <div>
@@ -123,7 +132,7 @@ export default function Login() {
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 disabled={isLoading}
                             >
-                                Sign in
+                                {isLoading? <Loader className="animate-spin"/>: 'Sign In'}
                             </button>
                         </div>
                         {
@@ -131,7 +140,7 @@ export default function Login() {
                         <Error message={errorMessage}/>
                         }
                         {
-                            (registrationStatus !== '' && errorMessage === '') && <Success message={registrationStatus}/>
+                            (registrationStatus !== '') && <Success message={registrationStatus}/>
                         }
                     </form>
                 </div>
