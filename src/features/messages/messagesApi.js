@@ -10,7 +10,7 @@ export const messagesApi = apiSlice.injectEndpoints({
 				arg,
 				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved }
 			) {
-				const socket = io(process.env.REACT_DEV_ENV === "development"? 'http://localhost:9000': process.env.REACT_APP_API_URL, {
+				const socket = io(process.env.NODE_ENV === "development"? 'http://localhost:9000': process.env.REACT_APP_API_URL, {
 					reconnectionDelay: 1000,
 					reconnection: true,
 					reconnectionAttempts: 10,

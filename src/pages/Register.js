@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRegisterMutation } from "../features/auth/authApi";
 import Error from "../components/ui/Error"
 import RegistrationSuccess from "../components/ui/RegistrationSuccess";
+import { useDispatch } from "react-redux";
+import { userRegistered } from "../features/auth/authSlice";
 
 export default function Register() {
     const [name, setName] = useState('');
@@ -12,7 +14,10 @@ export default function Register() {
     const [agreeTerm, setAgreeTerm] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [success, setSuccess] = useState(false);
+    const [opened, setOpened] = useState(false);
+    const controlModal = useCallback(() => setOpened((prevState) => !prevState), [])
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [register, {data, isLoading, error: responseError}] = useRegisterMutation();
     useEffect(() => {
@@ -21,8 +26,11 @@ export default function Register() {
         }
         if(data) {
             setSuccess(true);
+            setOpened(true);
+            dispatch(userRegistered());
+            navigate("/");
         }
-    }, [data, responseError, navigate]);
+    }, [data, responseError, navigate, dispatch]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,6 +45,7 @@ export default function Register() {
             setErrorMessage("Please agree to the term conditions");
         }
     }
+    
     return (
         <div className="grid place-items-center h-screen bg-gradient-to-r from-slate-900 to-slate-700">
             <div className="min-h-full flex items-center justify-center py-2 px-4 sm:px-6 lg:px-8">
@@ -161,9 +170,7 @@ export default function Register() {
                                 Sign up
                             </button>
                         </div>
-                        {
-                            success && <RegistrationSuccess/>
-                        }
+                            <RegistrationSuccess open={opened} control={controlModal}/>
                         {
                         errorMessage !== '' &&
                         <Error message={errorMessage}/>
