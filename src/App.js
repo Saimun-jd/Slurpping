@@ -7,6 +7,7 @@ import useAuthCheck from "./hooks/useAuthCheck";
 import PrivateRoute from "./pages/PrivateRoute";
 import PublicRoute from "./pages/PublicRoute";
 import VerifyEmail from "./pages/VerifyEmail";
+import GoogleAuthSuccess from "./features/auth/GoogleAuth";
 
 function App() {
 	const authChecked = useAuthCheck();
@@ -29,6 +30,7 @@ function App() {
 						<Register />
 					}
 				/>
+				<Route path="/google-auth-success" element={<GoogleAuthSuccess />} />
 				<Route
 					path="/inbox/:id"
 					element={
