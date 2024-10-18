@@ -11,7 +11,12 @@ const GoogleAuthSuccess = () => {
     const fetchGoogleAuthInfo = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/google-auth-info`, {
-          credentials: 'include' // Necessary for including cookies
+          method: 'GET',
+          credentials: 'include', // This is crucial for including cookies
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
         });
         if (!response.ok) {
           throw new Error('Failed to fetch Google auth info');
