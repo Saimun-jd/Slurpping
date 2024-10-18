@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userLoggedIn } from './authSlice';
@@ -6,52 +6,59 @@ import { userLoggedIn } from './authSlice';
 const GoogleAuthSuccess = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchGoogleAuthInfo = async () => {
       try {
+        // a small delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        console.log('Attempting to fetch Google auth info...');
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/google-auth-info`, {
           method: 'GET',
-          credentials: 'include', // This is crucial for including cookies
+          credentials: 'include',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
         });
+        
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+
         if (!response.ok) {
-          throw new Error('Failed to fetch Google auth info');
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch Google auth info: ${response.status} ${errorText}`);
         }
+        
         const data = await response.json();
+        console.log('Received data:', data);
         
-        // Dispatch login success action
-        localStorage.setItem(
-						"userInfo",
-						JSON.stringify({user: data?.user })
-					);
-					localStorage.setItem(
-						"accessToken",
-						JSON.stringify(
-							data?.accessToken,
-						)
-					);
-					dispatch(
-						userLoggedIn({
-							userInfo: {user: data?.user},
-							accessToken: data?.accessToken,
-						})
-					);
+        if (!data.user || !data.accessToken) {
+          throw new Error('Invalid data received from server');
+        }
+
+        localStorage.setItem("userInfo", JSON.stringify({user: data.user}));
+        localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+        dispatch(userLoggedIn({
+          userInfo: {user: data.user},
+          accessToken: data.accessToken,
+        }));
         
-        // Redirect to inbox
         navigate('/inbox');
       } catch (error) {
-        console.error('Error fetching Google auth info:', error);
-        // Handle error (e.g., show error message, redirect to login page)
-        navigate('/');
+        console.error('Error in GoogleAuthSuccess:', error);
+        setError(error.message);
       }
     };
 
     fetchGoogleAuthInfo();
   }, [dispatch, navigate]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return <div>Completing Google login...</div>;
 };
