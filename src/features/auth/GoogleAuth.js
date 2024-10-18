@@ -41,7 +41,7 @@ const GoogleAuthSuccess = () => {
       } catch (error) {
         console.error('Error fetching Google auth info:', error);
         // Handle error (e.g., show error message, redirect to login page)
-        navigate('/login');
+        navigate('/');
       }
     };
 
