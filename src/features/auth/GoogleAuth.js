@@ -10,7 +10,7 @@ const GoogleAuthSuccess = () => {
   useEffect(() => {
     const fetchGoogleAuthInfo = async () => {
       try {
-        const response = await fetch(process.env.NODE_ENV === "development"? 'http://localhost:9000/api/auth/google-auth-info': `${process.env.REACT_APP_API_URL}/api/auth/google-auth-info`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/google-auth-info`, {
           credentials: 'include' // Necessary for including cookies
         });
         if (!response.ok) {

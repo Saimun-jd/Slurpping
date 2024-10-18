@@ -64,7 +64,7 @@ export default function Login() {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = process.env.NODE_ENV === 'development'? `http://localhost:9000/api/auth/google/callback` : `${process.env.REACT_APP_API_URL}/api/auth/google/callback`
+        window.location.href = `${process.env.REACT_APP_API_URL}/api/auth/google/callback`
     } 
 
     // console.log(registrationStatus);
