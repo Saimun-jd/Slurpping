@@ -6,6 +6,7 @@ export const apiSlice = createApi({
         baseUrl: process.env.NODE_ENV === "development"? 'http://localhost:9000': process.env.REACT_APP_API_URL,
         prepareHeaders: async (headers, {getState, endpoint}) => {
             const token = getState()?.auth?.accessToken;
+            console.log("access token ", token)
             
             if(token) {
                 headers.set('Authorization', `Bearer ${token}`);
