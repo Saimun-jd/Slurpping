@@ -5,6 +5,7 @@ import { useLoginMutation } from "../features/auth/authApi";
 import { useDispatch} from "react-redux";
 import Success from "../components/ui/Success";
 import { Loader } from "lucide-react";
+import {userLoggedIn} from '../features/auth/authSlice';
 
 export default function Login() {
     const [username, setUserName] = useState('');
@@ -49,6 +50,56 @@ export default function Login() {
         }
         sessionStorage.removeItem('registrationDone');
     }, [])
+
+    useEffect(() => {
+        const fetchGoogleAuthInfo = async () => {
+      try {
+        // a small delay
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+
+        console.log('Attempting to fetch Google auth info...');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/google/callback`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch Google auth info: ${response.status} ${errorText}`);
+        }
+        
+        const data = await response.json();
+        console.log("received data ", data);
+        console.log('Received data:', data);
+        
+        if (!data.user || !data.accessToken) {
+          throw new Error('Invalid data received from server');
+        }
+
+        localStorage.setItem("userInfo", JSON.stringify({user: data.user}));
+        localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+        dispatch(userLoggedIn({
+          userInfo: {user: data.user},
+          accessToken: data.accessToken,
+        }));
+        
+        navigate('/inbox');
+      } catch (error) {
+        console.error('Error in GoogleAuthSuccess:', error);
+        // setError(error.message);
+        navigate("/");
+      }
+    };
+
+    fetchGoogleAuthInfo();
+    }, [dispatch, navigate])
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
