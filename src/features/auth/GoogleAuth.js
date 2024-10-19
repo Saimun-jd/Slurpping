@@ -15,7 +15,7 @@ const GoogleAuthSuccess = () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         console.log('Attempting to fetch Google auth info...');
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/google-auth-info`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/mongo-auth-info`, {
           method: 'GET',
           credentials: 'include',
           headers: {
