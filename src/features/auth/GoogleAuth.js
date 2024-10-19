@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useLocation } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { userLoggedIn } from './authSlice';
 
 const GoogleAuthSuccess = () => {
