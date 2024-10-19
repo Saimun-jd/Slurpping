@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLocation } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userLoggedIn } from './authSlice';
@@ -7,15 +7,21 @@ const GoogleAuthSuccess = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchGoogleAuthInfo = async () => {
       try {
         // a small delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+        const param = new URLSearchParams(location.search);
+        const id = param.get('id');
+        if(!id) {
+          console.log("id not found from param");
+        }
 
         console.log('Attempting to fetch Google auth info...');
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/mongo-auth-info`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/mongo-auth-info?id=${id}`, {
           method: 'GET',
           credentials: 'include',
           headers: {
@@ -24,13 +30,13 @@ const GoogleAuthSuccess = () => {
           },
         });
         
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
+        // console.log('Response status:', response.status);
+        // console.log('Response headers:', response.headers);
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Failed to fetch Google auth info: ${response.status} ${errorText}`);
-        }
+        // if (!response.ok) {
+        //   const errorText = await response.text();
+        //   throw new Error(`Failed to fetch Google auth info: ${response.status} ${errorText}`);
+        // }
         
         const data = await response.json();
         console.log('Received data:', data);
@@ -54,7 +60,7 @@ const GoogleAuthSuccess = () => {
     };
 
     fetchGoogleAuthInfo();
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, location]);
 
   if (error) {
     return <div>Error: {error}</div>;
