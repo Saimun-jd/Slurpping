@@ -44,6 +44,7 @@ const GoogleAuthSuccess = () => {
         if (!data.user || !data.accessToken) {
           throw new Error('Invalid data received from server');
         }
+        console.log("user data ", data.user);
 
         localStorage.setItem("userInfo", JSON.stringify({user: data.user}));
         localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
