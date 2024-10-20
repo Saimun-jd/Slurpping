@@ -20,7 +20,7 @@ const GoogleAuthSuccess = () => {
           console.log("id not found from param");
         }
 
-        console.log('Attempting to fetch Google auth info...');
+        // console.log('Attempting to fetch Google auth info...');
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/mongo-auth-info?id=${id}`, {
           method: 'GET',
           credentials: 'include',
@@ -29,14 +29,6 @@ const GoogleAuthSuccess = () => {
             'Content-Type': 'application/json',
           },
         });
-        
-        // console.log('Response status:', response.status);
-        // console.log('Response headers:', response.headers);
-
-        // if (!response.ok) {
-        //   const errorText = await response.text();
-        //   throw new Error(`Failed to fetch Google auth info: ${response.status} ${errorText}`);
-        // }
         
         const data = await response.json();
         console.log('Received data:', data);
@@ -64,7 +56,17 @@ const GoogleAuthSuccess = () => {
   }, [dispatch, navigate, location]);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <>
+        <div>
+        <span className='font-bold text-red-600'>Error: </span>
+        <span className='font-semibold text-red-400'>
+          {error}
+        </span>
+        </div>
+        <button onClick={navigate("/")}>Return to login</button>
+      </>
+    );
   }
 
   return <div>Completing Google login...</div>;
